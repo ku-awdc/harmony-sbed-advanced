@@ -1,0 +1,308 @@
+---
+title: 'Madrid Advanced training: day 1'
+author: "Giles Innocent"
+date: "2023-07-12"
+output: html_document
+#output: beamer_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(runjags)
+library(pander)
+library(ggplot2)
+```
+
+## Introduction
+
+\Huge"Hello"
+
+- Building on the basic course.
+- __NOT__ lecture:practical.
+- More intro: practical or discussion.
+- You'll get more out of it if you try the exercises __before__ looking at the sample code.
+
+## Simulation
+
+- Why simulate?
+- How to simulate
+    + within JAGS
+    + R or equivalent
+    + from an identical model to the analysis model
+    + from a different model to the analysis
+
+## Simulating in R
+
+- Functions like rbinom, rpois, rnorm, etc.
+- All take a first parameter, n the number of data points you wish to simulate
+- E.G. Hui-Walter paradigm:
+```{R}
+  set.seed(1)
+  n.sim <- 1
+  prev <- c(0.25, 0.8)
+  Se.1 <- Se.2 <- 0.8
+  Sp.1 <- Sp.2 <- 0.95
+  n.sampled <- c(100, 100)
+  test.results <- data.frame(pp=numeric(length(prev)),
+                             pn=numeric(length(prev)),
+                             np=numeric(length(prev)),
+                             nn=numeric(length(prev)))
+  for(pop in 1:length(prev)){
+    n.pos <- rbinom(n.sim,n.sampled[pop],prev[pop])
+    test.results$pp[pop] <- rbinom(n.sim, n.pos, Se.1*Se.2) + 
+      rbinom(n.sim, n.sampled[pop]-n.pos, (1-Sp.1)*(1-Sp.2))
+    test.results$pn[pop] <- rbinom(n.sim, n.pos, Se.1*(1-Se.2)) + 
+      rbinom(n.sim, n.sampled[pop]-n.pos, (1-Sp.1)*Sp.2)
+    test.results$np[pop] <- rbinom(n.sim, n.pos, (1-Se.1)*Se.2) + 
+      rbinom(n.sim, n.sampled[pop]-n.pos, Sp.1*(1-Sp.2))
+    test.results$nn[pop] <- n.sampled[pop]-test.results$pp[pop]-
+      test.results$pn[pop] -test.results$np[pop]
+  }
+
+```
+
+- What is wrong with this example?
+
+### A better version
+
+```{R}
+  set.seed(1)
+  n.sim <- 1
+  prev <- c(0.25, 0.8)
+  Se.1 <- Se.2 <- 0.8
+  Sp.1 <- Sp.2 <- 0.95
+  cond.prob.pos <- c(Se.1*Se.2, # probability a positive individual tests ++ 
+                     (1-Se.1)*Se.2, # probability a positive individual tests -+ 
+                     Se.1*(1-Se.2), # probability a positive individual tests + 
+                     (1-Se.1)*(1-Se.2)) # probability a positive individual tests --
+  cond.prob.neg <- c((1-Sp.1)*(1-Sp.2), # probability a negative individual tests ++
+                     Sp.1*(1-Sp.2), # probability a negative individual tests -+
+                     (1-Sp.1)*Sp.2, # probability a negative individual tests +-
+                     Sp.1*Sp.2) # probability a negative individual tests --
+  n.sampled <- c(100, 100)
+  test.results <- matrix(nrow=4,ncol=length(prev), dimnames=list(test.result = c("pp","np","pn","nn"), population = c("a","b")))
+  for(pop in 1:length(prev)){
+    n.pos <- rbinom(n.sim,n.sampled[pop],prev[pop])
+    n.neg <- n.sampled[pop] - n.pos
+    test.results[,pop] <- rmultinom(n.sim, n.pos, cond.prob.pos) + 
+      rmultinom(n.sim, n.neg, cond.prob.neg)
+  }
+
+```
+
+  
+## Example
+
+  - 3 tests; 1 population
+  - 7 parameters:
+      + 3 test sensitivities
+      + 3 test specificities
+      + 1 prevalence
+  - $2^3$ combinations: 7 df in the data
+      + is this identifiable?
+      + are the estimates unbiased?
+      + what if prevalence is very low ~1%?
+      + even with 1000 individuals only ~10 are positive
+      + can't estimate Se well
+      + does a biased estimate of Se bias our estimates of Sp and/or prevalence?
+
+
+## Example R code
+
+```{R}
+simulation.3.test <- function(prev,n.sampled,Se,Sp) {
+  if((length(prev)!=1)&(length(n.sampled)!=1)&(length(Se)!=3)&(length(Sp)!=3)) {
+    print("Error in parameters sent to simulation.3.test")
+    stop()
+  }
+  n.pos <- rbinom(1,n.sampled,prev)
+  n.neg <- n.sampled - n.pos
+  test.1 <- c(rbinom(n.pos,1,Se[1]), rbinom(n.neg,1,(1-Sp[1])))
+  test.2 <- c(rbinom(n.pos,1,Se[2]), rbinom(n.neg,1,(1-Sp[2])))
+  test.3 <- c(rbinom(n.pos,1,Se[3]), rbinom(n.neg,1,(1-Sp[3])))
+  test.results <- c(
+    sum(test.1 & test.2 & test.3),
+    sum(test.1 & test.2 & !test.3),
+    sum(test.1 & !test.2 & test.3),
+    sum(test.1 & !test.2 & !test.3),
+    sum(!test.1 & test.2 & test.3),
+    sum(!test.1 & test.2 & !test.3),
+    sum(!test.1 & !test.2 & test.3),
+    sum(!test.1 & !test.2 & !test.3))
+  names(test.results) <- c("ppp", "ppn", "pnp", "pnn", "npp", "npn", "nnp", "nnn")
+  return(test.results)
+}
+```
+
+## Example R/JAGS code
+
+```{R}
+cat(
+"model{
+  # Likelihood part:
+  p.test.result[1] <-prev*Se[1]*Se[2]*Se[3] + (1-prev)*(1-Sp[1])*(1-Sp[2])*(1-Sp[3]) #ppp
+  p.test.result[2] <-prev*Se[1]*Se[2]*(1-Se[3]) + (1-prev)*(1-Sp[1])*(1-Sp[2])*Sp[3] #ppn
+  p.test.result[3] <-prev*Se[1]*(1-Se[2])*Se[3] + (1-prev)*(1-Sp[1])*Sp[2]*(1-Sp[3]) #pnp
+  p.test.result[4] <-prev*Se[1]*(1-Se[2])*(1-Se[3]) + (1-prev)*(1-Sp[1])*Sp[2]*Sp[3] #pnn
+  p.test.result[5] <-prev*(1-Se[1])*Se[2]*Se[3] + (1-prev)*Sp[1]*(1-Sp[2])*(1-Sp[3]) #npp
+  p.test.result[6] <-prev*(1-Se[1])*Se[2]*(1-Se[3]) + (1-prev)*Sp[1]*(1-Sp[2])*Sp[3] #npn
+  p.test.result[7] <-prev*(1-Se[1])*(1-Se[2])*Se[3] + (1-prev)*Sp[1]*Sp[2]*(1-Sp[3]) #nnp
+  p.test.result[8] <-prev*(1-Se[1])*(1-Se[2])*(1-Se[3]) + (1-prev)*Sp[1]*Sp[2]*Sp[3] #nnn
+  test.results ~dmulti(p.test.result, n.tested)
+    
+  # Prior part:
+  prev ~ dbeta(1,1)
+  for(test in 1:3)  {
+    Se[test] ~dbeta(1,1)
+    Sp[test] ~dbeta(1,1)
+  }
+  
+  # Hooks for automatic integration with R:
+  #data# test.results, n.tested
+  #monitor# prev, Se, Sp
+}
+", file = "three.test.jags")
+
+prev<- 0.50
+n.tested <- 1000
+Se <- c(0.8,0.8,0.95)
+Sp <- c(0.95,0.99,0.8)
+test.results <- simulation.3.test(prev,n.tested,Se,Sp)
+
+runjags.options(silent.jags=TRUE)
+n.burnin <- n.sample <- 5000
+results.jags <- run.jags('three.test.jags', n.chains=2, burnin=n.burnin, sample=n.sample)
+
+pander(summary(results.jags))
+
+```
+
+## How good is our posterior?
+
+- Eyeball posterior distribution
+- Are the means (medians, modes?) close to the values used for the simulation
+- If we wish to be more formal about this we would repeat teh simulation-analysis cycle many (400+) times
+  + this takes a long time, typically
+  + which is a better (less biased) predictor: mean, median or mode
+  + are the 95% Credible Intervals true 95% Confidence Intervals
+  
+## Posterior predicted p-values
+
+- But we're Bayesian aren't we?
+- Surely p-values belong to the frequentists!
+- Sometimes it is useful to compare data to a null hypothesis
+
+
+## Calculating a posterior predicted p-value
+
+- Simulate data based on the posterior distribution of the parameters
+- Typically 1 data set per iteration, using all parameters of interest
+- Define a metric/statistic to use
+- Calculate the metric for both the original data and for each simulated data set
+- The distribution of the metric from the simulated data sets represents its distribution under the null hypothesis that the model, and the posterior distributions are correct
+- Hence how extreme are the data under this null hypothesis
+- Low or high p-values (close to 0 or 1) give us cause for concern that the model is wrong.
+- What metric should we use?
+
+## Quick exercise
+
+- Simulate some data ~N(0,1)
+- Use JAGS to estimate the posterior for the mean and precision
+- Use the mean and precision to generate some more data
+- __Calculate__ the mean and variance of the samples
+- Where do the mean and variance of the data sit wrt the samples?
+- What happens if we mis-specify the priors?
+
+
+## My version
+
+```{R}
+n.obs <- 100
+obs <- rnorm(n.obs,0,1)
+obs.mu <- mean(obs)
+
+cat(
+"model{
+  # Likelihood part:
+  for(i in 1:n.obs) {
+    obs[i] ~ dnorm(mu, tau)
+  }
+    
+  # Prior part:
+  mu ~ dnorm(prior.mu.mu, prior.mu.tau)
+  tau ~dgamma(0.001,0.001)
+  
+  # Simulation part
+  for(i in 1:n.obs) {
+    sim.obs[i] ~dnorm(mu, tau)
+  }
+  sim.mu <- mean(sim.obs)
+  obs.mean.higher <- obs.mu > sim.mu
+  
+  # Hooks for automatic integration with R:
+  #data# obs, n.obs, obs.mu, prior.mu.mu, prior.mu.tau
+  #monitor# obs.mean.higher
+}
+", file = "ppp.mu.jags")
+
+prior.mu.mu <- 0
+prior.mu.tau <- 0.001
+runjags.options(silent.jags=TRUE)
+n.burnin <- n.sample <- 5000
+results.jags <- run.jags('ppp.mu.jags', n.chains=2, burnin=n.burnin, sample=n.sample)
+
+pander(summary(results.jags))
+```
+
+## Mis-specifying the prior
+
+```{R}
+prior.mu.mu <- 10
+prior.mu.tau <- 4
+results.jags <- run.jags('ppp.mu.jags', n.chains=2, burnin=n.burnin, sample=n.sample)
+
+pander(summary(results.jags))
+```
+
+
+## Random effects formulation used in medicine
+
+The "standard" approach, as used in the introductory course, to specifying the interaction between two or more tests, is to add an ammount to the probability that the two tests agree, and subtract the same amount from the probability that they disagree:
+
+| Animal + | Test 1 + | Test 1 - |
+|-|-|-|
+|Test2 + | $Se_1Se_2 + a$ |  $(1-Se_1)Se_2 - a$ |
+|Test2 - | $Se_1(1-Se_2) - a$ |  $(1-Se_1)(1-Se_2) + a$ |
+
+## The problems with this approach
+
+- The possible range of a depends on $Se_1$ and $Se_2$ since these must all be probabilities and add up to 1
+- It is difficult to define the distribution of a
+
+## Alternative formulations
+
+- Define two latent states
+  + e.g. infection and seroconversion
+  + Matt tells me that this converges poorly
+- "Random effects" model
+  + "standard" approach, above can be considered a "fixed effects" model
+  + "random effect" refers to a latent continuous variable associated with each individual
+  + the latent variable can be thought of as the propensity to test positive
+  + latent variables are relevant for both true positive animals (Se) and true negative animals (Sp)
+  + we need a monotonically increasing function limited by [0,1] to link the propensity of an individual and the probability that it tests positive
+  + a logistic model seems appropriate i.e. $\mathrm{logit}(P(T_{it}) = 1) = a_{td} + b_{d}*p_i, D_i=d$
+    + where $P(T_{it} = 1)$ is the probability that individual i tests positive to test t
+    + $a_{td}$ is a parameter to estimate for each test, t and disease status, d (diseased or not) and can be thought of as an estimate of teh test sensitivity or specificity
+    + $p_i$ is the propensity for individual i to test positive, and is $\sim{N(0,1)}$
+    + $b_d$ is a scaling factor since we use a standardised normal distribution for $p_i$
+    + an alternative formulation is to replace $b_{d}*p_i$ with $p_i \simN(0, Tau_d$
+  + to estimate the overall Se or Sp we need to integrate out $p_i$
+  + if $b_d$ is zero (or all $p_i$ are identical) then the Sensitivities/Specificities are conditionally independent
+  
+### Thought exercise
+
+How would you:
+
+a) Simulate data to check to see if this works?
+b) Code this in JAGS?
+

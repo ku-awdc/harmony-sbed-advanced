@@ -1,0 +1,23 @@
+model{
+  # Likelihood part:
+  p.test.result[1] <-prev*Se[1]*Se[2]*Se[3] + (1-prev)*(1-Sp[1])*(1-Sp[2])*(1-Sp[3]) #ppp
+  p.test.result[2] <-prev*Se[1]*Se[2]*(1-Se[3]) + (1-prev)*(1-Sp[1])*(1-Sp[2])*Sp[3] #ppn
+  p.test.result[3] <-prev*Se[1]*(1-Se[2])*Se[3] + (1-prev)*(1-Sp[1])*Sp[2]*(1-Sp[3]) #pnp
+  p.test.result[4] <-prev*Se[1]*(1-Se[2])*(1-Se[3]) + (1-prev)*(1-Sp[1])*Sp[2]*Sp[3] #pnn
+  p.test.result[5] <-prev*(1-Se[1])*Se[2]*Se[3] + (1-prev)*Sp[1]*(1-Sp[2])*(1-Sp[3]) #npp
+  p.test.result[6] <-prev*(1-Se[1])*Se[2]*(1-Se[3]) + (1-prev)*Sp[1]*(1-Sp[2])*Sp[3] #npn
+  p.test.result[7] <-prev*(1-Se[1])*(1-Se[2])*Se[3] + (1-prev)*Sp[1]*Sp[2]*(1-Sp[3]) #nnp
+  p.test.result[8] <-prev*(1-Se[1])*(1-Se[2])*(1-Se[3]) + (1-prev)*Sp[1]*Sp[2]*Sp[3] #nnn
+  test.results ~dmulti(p.test.result, n.tested)
+    
+  # Prior part:
+  prev ~ dbeta(1,1)
+  for(test in 1:3)  {
+    Se[test] ~dbeta(1,1)
+    Sp[test] ~dbeta(1,1)
+  }
+  
+  # Hooks for automatic integration with R:
+  #data# test.results, n.tested
+  #monitor# prev, Se, Sp
+}

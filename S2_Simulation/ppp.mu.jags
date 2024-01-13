@@ -1,0 +1,21 @@
+model{
+  # Likelihood part:
+  for(i in 1:n.obs) {
+    obs[i] ~ dnorm(mu, tau)
+  }
+    
+  # Prior part:
+  mu ~ dnorm(prior.mu.mu, prior.mu.tau)
+  tau ~dgamma(0.001,0.001)
+  
+  # Simulation part
+  for(i in 1:n.obs) {
+    sim.obs[i] ~dnorm(mu, tau)
+  }
+  sim.mu <- mean(sim.obs)
+  obs.mean.higher <- obs.mu > sim.mu
+  
+  # Hooks for automatic integration with R:
+  #data# obs, n.obs, obs.mu, prior.mu.mu, prior.mu.tau
+  #monitor# obs.mean.higher
+}
