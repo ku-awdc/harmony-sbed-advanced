@@ -1,0 +1,25 @@
+model{
+  # Likelihood part:
+  for (i in 1:n.pop) {
+    p.test.result[1,i] <-prev[i]*Se[1]*Se[2] + (1-prev[i])*(1-Sp[1])*(1-Sp[2]) #pp
+    p.test.result[3,i] <-prev[i]*(1-Se[1])*Se[2] + (1-prev[i])*(Sp[1])*(1-Sp[2]) #np
+    p.test.result[2,i] <-prev[i]*Se[1]*(1-Se[2]) + (1-prev[i])*(1-Sp[1])*Sp[2] #pn
+    p.test.result[4,i] <-prev[i]*(1-Se[1])*(1-Se[2]) + (1-prev[i])*Sp[1]*Sp[2] #nn
+    test.results[,i] ~dmulti(p.test.result[,i], n.sampled[i])
+  }
+  
+  
+    
+  # Prior part:
+  for (pop in 1:n.pop)  {
+    prev[pop] ~ dbeta(1,1)
+  }
+  for(test in 1:2)  {
+    Se[test] ~dbeta(3,2)
+    Sp[test] ~dbeta(3,2)
+  }
+  
+  # Hooks for automatic integration with R:
+  #data# test.results, n.sampled, n.pop
+  #monitor# prev, Se, Sp
+}
