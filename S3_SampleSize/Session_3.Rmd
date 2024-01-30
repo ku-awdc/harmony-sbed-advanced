@@ -421,3 +421,5 @@ If you are interested in making this more complicated (!), you can read through 
 ```{r include=FALSE}
 unlink(cleanup)
 ```
+
+## Remember the bonus session 4!
