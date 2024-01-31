@@ -2,8 +2,8 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded f
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**Session_3.tex
-(./Session_3.tex
+**Session_1.tex
+(./Session_1.tex
 LaTeX2e <2021-11-15> patch level 1
 L3 programming layer <2022-01-21> (/usr/local/texlive/2021/texmf-dist/tex/latex
 /beamer/beamer.cls
@@ -867,17 +867,17 @@ Package: keystroke 2010/04/23 v1.6 3D keystrokes (SuSE GmbH/RN)
 File: keystroke_left.pdf Graphic file (type pdf)
 <use keystroke_left.pdf>
 Package pdftex.def Info: keystroke_left.pdf  used on input line 171.
-(pdftex.def)             Requested size: 42.15802pt x 195.73373pt.
+(pdftex.def)             Requested size: 42.15738pt x 195.73076pt.
 <keystroke_middle.pdf, id=11, 116.435pt x 195.73125pt>
 File: keystroke_middle.pdf Graphic file (type pdf)
 <use keystroke_middle.pdf>
 Package pdftex.def Info: keystroke_middle.pdf  used on input line 172.
-(pdftex.def)             Requested size: 116.43825pt x 195.73672pt.
+(pdftex.def)             Requested size: 116.43471pt x 195.73076pt.
 <keystroke_right.pdf, id=12, 42.1575pt x 195.73125pt>
 File: keystroke_right.pdf Graphic file (type pdf)
 <use keystroke_right.pdf>
 Package pdftex.def Info: keystroke_right.pdf  used on input line 173.
-(pdftex.def)             Requested size: 42.15802pt x 195.73373pt.
+(pdftex.def)             Requested size: 42.15738pt x 195.73076pt.
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/fvextra/fvextra.sty
 Package: fvextra 2019/02/04 v1.4 fvextra - extensions and patches for fancyvrb
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/ifthen.sty
@@ -968,27 +968,27 @@ Package: xurl 2022/01/09 v 0.10 modify URL breaks
 File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count371
 \l__pdf_internal_box=\box92
-) (./Session_3.aux)
-\openout1 = `Session_3.aux'.
+) (./Session_1.aux)
+\openout1 = `Session_1.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 154.
-LaTeX Font Info:    ... okay on input line 154.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 154.
-LaTeX Font Info:    ... okay on input line 154.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 154.
-LaTeX Font Info:    ... okay on input line 154.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 154.
-LaTeX Font Info:    ... okay on input line 154.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 154.
-LaTeX Font Info:    ... okay on input line 154.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 154.
-LaTeX Font Info:    ... okay on input line 154.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 154.
-LaTeX Font Info:    ... okay on input line 154.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 154.
-LaTeX Font Info:    ... okay on input line 154.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 154.
-LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 141.
+LaTeX Font Info:    ... okay on input line 141.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 141.
+LaTeX Font Info:    ... okay on input line 141.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 141.
+LaTeX Font Info:    ... okay on input line 141.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 141.
+LaTeX Font Info:    ... okay on input line 141.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 141.
+LaTeX Font Info:    ... okay on input line 141.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 141.
+LaTeX Font Info:    ... okay on input line 141.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 141.
+LaTeX Font Info:    ... okay on input line 141.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 141.
+LaTeX Font Info:    ... okay on input line 141.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 141.
+LaTeX Font Info:    ... okay on input line 141.
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -1044,7 +1044,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Package hyperref Info: Link coloring OFF on input line 154.
+Package hyperref Info: Link coloring OFF on input line 141.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
 (/usr/local/texlive/2021/texmf-dist/tex/latex/refcount/refcount.sty
@@ -1056,55 +1056,55 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count378
 )
-LaTeX Info: Redefining \ref on input line 154.
-LaTeX Info: Redefining \pageref on input line 154.
-LaTeX Info: Redefining \nameref on input line 154.
+LaTeX Info: Redefining \ref on input line 141.
+LaTeX Info: Redefining \pageref on input line 141.
+LaTeX Info: Redefining \nameref on input line 141.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/ccr/m/n --> OT1/cmss/m/n on input line 154.
+(Font)                  OT1/ccr/m/n --> OT1/cmss/m/n on input line 141.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/ccr/m/n --> OT1/cmss/b/n on input line 154.
+(Font)                  OT1/ccr/m/n --> OT1/cmss/b/n on input line 141.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmss/m/n --> OT1/lmss/m/n on input line 154.
+(Font)                  OT1/cmss/m/n --> OT1/lmss/m/n on input line 141.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmss/b/n --> OT1/lmss/b/n on input line 154.
+(Font)                  OT1/cmss/b/n --> OT1/lmss/b/n on input line 141.
 \symnumbers=\mathgroup6
 \sympureletters=\mathgroup7
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `normal'
-(Font)                  OT1/lmss/m/n --> T1/ccr/m/n on input line 154.
-LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 154.
+(Font)                  OT1/lmss/m/n --> T1/ccr/m/n on input line 141.
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 141.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/ccr/bx/n --> T1/lmss/b/n on input line 154.
+(Font)                  OT1/ccr/bx/n --> T1/lmss/b/n on input line 141.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/ccr/bx/n --> T1/lmss/b/n on input line 154.
-LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 154.
+(Font)                  OT1/ccr/bx/n --> T1/lmss/b/n on input line 141.
+LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 141.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
-(Font)                  OT1/lmss/m/n --> T1/lmss/m/n on input line 154.
+(Font)                  OT1/lmss/m/n --> T1/lmss/m/n on input line 141.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/lmss/bx/n --> T1/lmss/m/n on input line 154.
-LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 154.
+(Font)                  OT1/lmss/bx/n --> T1/lmss/m/n on input line 141.
+LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 141.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/ccr/m/it --> T1/lmss/m/it on input line 154.
+(Font)                  OT1/ccr/m/it --> T1/lmss/m/it on input line 141.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/ccr/m/it --> T1/lmss/m/it on input line 154.
-LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 154.
+(Font)                  OT1/ccr/m/it --> T1/lmss/m/it on input line 141.
+LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 141.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
-(Font)                  OT1/lmtt/m/n --> T1/lmtt/m/n on input line 154.
+(Font)                  OT1/lmtt/m/n --> T1/lmtt/m/n on input line 141.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/lmtt/m/n --> T1/lmtt/m/n on input line 154.
+(Font)                  OT1/lmtt/m/n --> T1/lmtt/m/n on input line 141.
 LaTeX Font Info:    Overwriting symbol font `numbers' in version `bold'
-(Font)                  T1/lmss/m/n --> T1/lmss/b/n on input line 154.
+(Font)                  T1/lmss/m/n --> T1/lmss/b/n on input line 141.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `bold'
-(Font)                  T1/lmss/m/it --> T1/lmss/b/it on input line 154.
+(Font)                  T1/lmss/m/it --> T1/lmss/b/it on input line 141.
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `bold'
-(Font)                  OT1/lmss/b/n --> T1/ccr/b/n on input line 154.
+(Font)                  OT1/lmss/b/n --> T1/ccr/b/n on input line 141.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  T1/lmss/b/n --> T1/lmss/b/n on input line 154.
+(Font)                  T1/lmss/b/n --> T1/lmss/b/n on input line 141.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  T1/lmss/m/n --> T1/lmss/b/n on input line 154.
+(Font)                  T1/lmss/m/n --> T1/lmss/b/n on input line 141.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  T1/lmss/m/it --> T1/lmss/b/it on input line 154.
+(Font)                  T1/lmss/m/it --> T1/lmss/b/it on input line 141.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  T1/lmtt/m/n --> T1/lmtt/b/n on input line 154.
+(Font)                  T1/lmtt/m/n --> T1/lmtt/b/n on input line 141.
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/translator/translator-basic-dicti
 onary-English.dict
@@ -1130,12 +1130,12 @@ Dictionary: translator-numbers-dictionary, Language: English
 tionary-English.dict
 Dictionary: translator-theorem-dictionary, Language: English 
 )
-LaTeX Info: Redefining \microtypecontext on input line 154.
-Package microtype Info: Applying patch `item' on input line 154.
-Package microtype Info: Applying patch `toc' on input line 154.
-Package microtype Info: Applying patch `eqnum' on input line 154.
+LaTeX Info: Redefining \microtypecontext on input line 141.
+Package microtype Info: Applying patch `item' on input line 141.
+Package microtype Info: Applying patch `toc' on input line 141.
+Package microtype Info: Applying patch `eqnum' on input line 141.
 
-Package microtype Warning: Unable to apply patch `footnote' on input line 154.
+Package microtype Warning: Unable to apply patch `footnote' on input line 141.
 
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
@@ -1143,7 +1143,7 @@ Package microtype Info: Using protrusion set `basicmath'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `alltext-nott'.
-LaTeX Info: Redefining \showhyphens on input line 154.
+LaTeX Info: Redefining \showhyphens on input line 141.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
@@ -1151,326 +1151,188 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `lmss' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-(./Session_3.nav)
-Overfull \vbox (45.59123pt too high) detected at line 155
+(./Session_1.nav)
+Overfull \vbox (45.59123pt too high) detected at line 142
  []
 
 [1
 
 {/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-\openout4 = `Session_3.vrb'.
+\openout4 = `Session_1.vrb'.
 
-(./Session_3.vrb
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 8
+(./Session_1.vrb
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 2
 .
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <8> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 10.
+LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10.95> not available
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 4.
 
-LaTeX Font Warning: Font shape `T1/lmtt/bx/it' in size <8> not available
-(Font)              Font shape `T1/lmtt/b/sl' tried instead on input line 10.
+LaTeX Font Warning: Font shape `T1/lmtt/bx/it' in size <10.95> not available
+(Font)              Font shape `T1/lmtt/b/sl' tried instead on input line 4.
 
-) [2
-
-] (./Session_3.vrbpdfTeX warning (ext4): destination with the same identifier (
-name{a-note-on-coding-styles}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.2 ...tect\hypertarget{a-note-on-coding-styles}{}
-                                                  ) [3
-
-]
 LaTeX Font Info:    Trying to load font information for OT1+lmss on input line 
-183.
+4.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/ot1lmss.fd
 File: ot1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `lmss' (encoding: OT1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-LaTeX Font Info:    Trying to load font information for OML+ccm on input line 1
-83.
+LaTeX Font Info:    Trying to load font information for OML+ccm on input line 4
+.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/concmath/omlccm.fd
 File: omlccm.fd 1999/03/10 v2.0b LaTeX font defs for Concrete math fonts
 )
 LaTeX Font Info:    Trying to load font information for OMS+ccsy on input line 
-183.
+4.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/concmath/omsccsy.fd
 File: omsccsy.fd 1999/03/10 v2.0b LaTeX font defs for Concrete math fonts
 )
 LaTeX Font Info:    Trying to load font information for OMX+ccex on input line 
-183.
+4.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/concmath/omxccex.fd
 File: omxccex.fd 1999/03/10 v2.0b LaTeX font defs for Concrete math fonts
 )
 LaTeX Font Info:    External font `xccex10' loaded for size
-(Font)              <10.95> on input line 183.
+(Font)              <6> on input line 4.
 LaTeX Font Info:    External font `xccex10' loaded for size
-(Font)              <8> on input line 183.
-LaTeX Font Info:    External font `xccex10' loaded for size
-(Font)              <6> on input line 183.
+(Font)              <5> on input line 4.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10.95> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 183.
-LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <8> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 183.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <6> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 183.
-[4
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 4.
+LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <5> not available
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 4.
+LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
+15.
+(/usr/local/texlive/2021/texmf-dist/tex/latex/lm/ts1lmtt.fd
+File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+
+LaTeX Font Warning: Font shape `TS1/lmtt/bx/it' in size <10.95> not available
+(Font)              Font shape `TS1/lmtt/b/sl' tried instead on input line 15.
+
+)
+Overfull \vbox (216.71602pt too high) detected at line 178
+ []
+
+[2
 
 ]
-\openout4 = `Session_3.vrb'.
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `lmss' (encoding: OT1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+LaTeX Font Info:    External font `xccex10' loaded for size
+(Font)              <10.95> on input line 181.
+LaTeX Font Info:    External font `xccex10' loaded for size
+(Font)              <8> on input line 181.
+LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10.95> not available
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 181.
+LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <8> not available
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 181.
+[3
 
-pdfTeX warning (ext4): destination with the same identifier (name{background-to
--sample-size-calculations}) has been already used, duplicate ignored
+]pdfTeX warning (ext4): destination with the same identifier (name{revision}) h
+as been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.218 \end{frame}
-                  (./Session_3.vrb)
-Overfull \vbox (9.32558pt too high) detected at line 218
+l.204 \end{frame}
+                 
+Overfull \vbox (10.87608pt too high) detected at line 204
+ []
+
+[4
+
+]pdfTeX warning (ext4): destination with the same identifier (name{bayes-rule})
+ has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.204 \end{frame}
+                 
+Overfull \vbox (10.87608pt too high) detected at line 204
  []
 
 [5
 
 ]
-\openout4 = `Session_3.vrb'.
-
-(./Session_3.vrb) [6
-
-]
-\openout4 = `Session_3.vrb'.
-
-(./Session_3.vrb) [7
-
-]
-\openout4 = `Session_3.vrb'.
-
-(./Session_3.vrb) [8
-
-] (./Session_3.vrb) [9
-
-]
-\openout4 = `Session_3.vrb'.
-
-(./Session_3.vrb) [10
-
-]
-\openout4 = `Session_3.vrb'.
-
-(./Session_3.vrb) [11
-
-]
-<Session_3_files/figure-beamer/unnamed-chunk-10-1.pdf, id=88, 712.6625pt x 493.
-845pt>
-File: Session_3_files/figure-beamer/unnamed-chunk-10-1.pdf Graphic file (type p
-df)
-<use Session_3_files/figure-beamer/unnamed-chunk-10-1.pdf>
-Package pdftex.def Info: Session_3_files/figure-beamer/unnamed-chunk-10-1.pdf  
-used on input line 386.
-(pdftex.def)             Requested size: 329.2424pt x 228.15106pt.
-
-Overfull \vbox (0.99258pt too high) detected at line 386
- []
-
-[12
-
- <./Session_3_files/figure-beamer/unnamed-chunk-10-1.pdf>] [13
-
-]
-\openout4 = `Session_3.vrb'.
-
-pdfTeX warning (ext4): destination with the same identifier (name{sample-size-c
-alculation-for-lcm}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.409 \end{frame}
-                  (./Session_3.vrb
 LaTeX Font Info:    Trying to load font information for TS1+lmss on input line 
-7.
+225.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/ts1lmss.fd
 File: ts1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)) [14
+) [6
 
-]
-\openout4 = `Session_3.vrb'.
+] [7
 
-(./Session_3.vrb) [15
+] [8
 
-] (./Session_3.vrbpdfTeX warning (ext4): destination with the same identifier (
-name{types-of-parameter}) has been already used, duplicate ignored
+] [9
+
+] [10
+
+]pdfTeX warning (ext4): destination with the same identifier (name{everyone-up-
+to-speed}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2 \protect\hypertarget{types-of-parameter}{}
-                                              ) [16
+l.274 \end{frame}
+                  [11
 
-] [17
+] [12
 
-]
-\openout4 = `Session_3.vrb'.
-
-(./Session_3.vrb) [18
-
-] (./Session_3.vrbpdfTeX warning (ext4): destination with the same identifier (
-name{determining-the-objective-1}) has been already used, duplicate ignored
+]pdfTeX warning (ext4): destination with the same identifier (name{learning-out
+comes}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2 ...\hypertarget{determining-the-objective-1}{}
-                                                  ) [19
+l.303 \end{frame}
+                  [13
 
-] (./Session_3.vrbpdfTeX warning (ext4): destination with the same identifier (
-name{determining-the-objective-1}) has been already used, duplicate ignored
+]pdfTeX warning (ext4): destination with the same identifier (name{learning-out
+comes}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2 ...\hypertarget{determining-the-objective-1}{}
-                                                  ) [20
-
-] (./Session_3.vrbpdfTeX warning (ext4): destination with the same identifier (
-name{determining-the-objective-1}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.2 ...\hypertarget{determining-the-objective-1}{}
-                                                  ) [21
-
-]
-\openout4 = `Session_3.vrb'.
-
-(./Session_3.vrb)
-Overfull \vbox (22.50084pt too high) detected at line 534
- []
-
-[22
-
-]
-\openout4 = `Session_3.vrb'.
-
-(./Session_3.vrb) [23
-
-]
-\openout4 = `Session_3.vrb'.
-
-(./Session_3.vrb) [24
-
-]
-\openout4 = `Session_3.vrb'.
-
-(./Session_3.vrb)
-Overfull \vbox (30.01637pt too high) detected at line 625
- []
-
-[25
-
-]
-\openout4 = `Session_3.vrb'.
-
-(./Session_3.vrb) [26
-
-] (./Session_3.vrbpdfTeX warning (ext4): destination with the same identifier (
-name{a-quick-note-on-label-switching}) has been already used, duplicate ignored
-
-<to be read again> 
-                   \relax 
-l.2 ...ertarget{a-quick-note-on-label-switching}{}
-                                                  ) [27
-
-]
-\openout4 = `Session_3.vrb'.
-
-(./Session_3.vrb
-LaTeX Font Info:    External font `xccex10' loaded for size
-(Font)              <5> on input line 24.
-LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <5> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 24.
-)
-Overfull \vbox (61.30489pt too high) detected at line 692
- []
-
-[28
-
-]
-\openout4 = `Session_3.vrb'.
-
-(./Session_3.vrb) [29
-
-]
-\openout4 = `Session_3.vrb'.
-
-(./Session_3.vrb
-<Session_3_files/figure-beamer/unnamed-chunk-18-1.pdf, id=206, 706.64pt x 495.8
-525pt>
-File: Session_3_files/figure-beamer/unnamed-chunk-18-1.pdf Graphic file (type p
-df)
-<use Session_3_files/figure-beamer/unnamed-chunk-18-1.pdf>
-Package pdftex.def Info: Session_3_files/figure-beamer/unnamed-chunk-18-1.pdf  
-used on input line 3.
-(pdftex.def)             Requested size: 325.1446pt x 228.15544pt.
-)
-Overfull \vbox (109.71857pt too high) detected at line 729
- []
-
-[30
-
- <./Session_3_files/figure-beamer/unnamed-chunk-18-1.pdf>]
-<Session_3_files/figure-beamer/unnamed-chunk-19-1.pdf, id=220, 706.64pt x 495.8
-525pt>
-File: Session_3_files/figure-beamer/unnamed-chunk-19-1.pdf Graphic file (type p
-df)
-<use Session_3_files/figure-beamer/unnamed-chunk-19-1.pdf>
-Package pdftex.def Info: Session_3_files/figure-beamer/unnamed-chunk-19-1.pdf  
-used on input line 742.
-(pdftex.def)             Requested size: 325.1446pt x 228.15544pt.
-
-Overfull \vbox (84.0341pt too high) detected at line 742
- []
-
-[31
-
- <./Session_3_files/figure-beamer/unnamed-chunk-19-1.pdf>]
-\openout4 = `Session_3.vrb'.
-
-(./Session_3.vrb Excluding 'comment' comment.) [32
+l.303 \end{frame}
+                  [14
 
 ]
 \tf@nav=\write7
-\openout7 = `Session_3.nav'.
+\openout7 = `Session_1.nav'.
 
 \tf@toc=\write8
-\openout8 = `Session_3.toc'.
+\openout8 = `Session_1.toc'.
 
 \tf@snm=\write9
-\openout9 = `Session_3.snm'.
+\openout9 = `Session_1.snm'.
 
-(./Session_3.aux) ) 
+(./Session_1.aux) ) 
 Here is how much of TeX's memory you used:
- 29628 strings out of 478287
- 597820 string characters out of 5846750
- 863751 words of memory out of 5000000
- 46968 multiletter control sequences out of 15000+600000
- 530583 words of font info for 114 fonts, out of 8000000 for 9000
+ 29495 strings out of 478287
+ 595442 string characters out of 5846750
+ 864645 words of memory out of 5000000
+ 46938 multiletter control sequences out of 15000+600000
+ 530165 words of font info for 110 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,13n,122p,1810b,773s stack positions out of 5000i,500n,10000p,200000b,80000s
- </Users/matthewdenwood/Library/texlive/2021/texmf-var/fonts
-/pk/ljfour/public/concmath-fonts/xccsy6.600pk> </Users/matthewdenwood/Library/t
-exlive/2021/texmf-var/fonts/pk/ljfour/public/concmath-fonts/xccmi6.600pk>{/usr/
-local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/local/texlive
-/2021/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}</usr/local/texlive/2021/texmf-di
-st/fonts/type1/public/lm/lmss10.pfb></usr/local/texlive/2021/texmf-dist/fonts/t
-ype1/public/lm/lmss12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/publi
-c/lm/lmss8.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmssbx
-10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmtk10.pfb></u
-sr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmtko10.pfb></usr/local/
-texlive/2021/texmf-dist/fonts/type1/public/lm/lmtt8.pfb></usr/local/texlive/202
-1/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
-Output written on Session_3.pdf (32 pages, 253652 bytes).
+{/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ts
+1.enc} </Users/matthewdenwood/Library/texlive/2021/texmf-var/fonts/pk/ljfour/pu
+blic/concmath-fonts/xccsy10.657pk> </Users/matthewdenwood/Library/texlive/2021/
+texmf-var/fonts/pk/ljfour/public/concmath-fonts/xccmi10.657pk>{/usr/local/texli
+ve/2021/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/texlive/2021/texmf-
+dist/fonts/enc/dvips/lm/lm-ec.enc} </Users/matthewdenwood/Library/texlive/2021/
+texmf-var/fonts/pk/ljfour/public/concmath-fonts/xccsy6.600pk> </Users/matthewde
+nwood/Library/texlive/2021/texmf-var/fonts/pk/ljfour/public/concmath-fonts/xccm
+i6.600pk></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmss10.pfb><
+/usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmss12.pfb></usr/local
+/texlive/2021/texmf-dist/fonts/type1/public/lm/lmss8.pfb></usr/local/texlive/20
+21/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb></usr/local/texlive/2021/texmf
+-dist/fonts/type1/public/lm/lmsso10.pfb></usr/local/texlive/2021/texmf-dist/fon
+ts/type1/public/lm/lmtko10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/
+public/lm/lmtt10.pfb>
+Output written on Session_1.pdf (14 pages, 178334 bytes).
 PDF statistics:
- 314 PDF objects out of 1000 (max. 8388607)
- 240 compressed objects within 3 object streams
- 81 named destinations out of 1000 (max. 500000)
- 39001 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 182 PDF objects out of 1000 (max. 8388607)
+ 132 compressed objects within 2 object streams
+ 36 named destinations out of 1000 (max. 500000)
+ 38978 words of extra memory for PDF output out of 42996 (max. 10000000)
 

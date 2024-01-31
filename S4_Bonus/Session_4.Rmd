@@ -1,5 +1,5 @@
 ---
-title: "Session 1"
+title: "Session 4"
 author: "Matt Denwood"
 date: '2024-01-31'
 output:
@@ -15,87 +15,163 @@ colortheme: seahorse
 header-includes: \input{../rsc/preamble}
 params:
   presentation: no
-subtitle: Revision and practical info
+subtitle: Bonus material!
 ---
 
-# Revision
+```{r setup, include=FALSE}
+source("../rsc/setup.R")
+```
 
-## Bayes Rule
+## Overview and disclaimers {.fragile}
 
-Bayes' theorem is at the heart of Bayesian statistics:
+The development version of runjags::template_huiwalter contains some modifications/extra features that you may find useful - this bonus material gives you a quick introduction to how to implement some of the things that I will present at the SBED conference (Thursday morning).
 
-$$P(\theta|Y) = \frac{P(\theta)\times P(Y|\theta)}{P(Y)}$$
+DISCLAIMER:  these features are in development, so the code WILL CHANGE before the final version has been released.  There may also be things that don't work as expected.  So please don't put this into production code just yet...
 
-. . .
+NOTE:  The rest of this material is only available in the html version (the PDF ends here, as I am not presenting this).
 
-Where:  $\theta$ is our parameter value(s);
+`r exercise_start()`
 
-$Y$ is the data that we have observed;
+## Installing compilers 
 
-$P(\theta|Y)$ is the posterior probability of the parameter value(s);
+You will need to install the development version of runjags from source - this requires C++ compilers.  See the relevant platform-specific instructions below:
 
-$P(\theta)$ is the prior probability of the parameters;
+### Windows
 
-$P(Y|\theta)$ is the likelihood of the data given the parameters value(s);
+You will need to install Rtools from here: https://cran.r-project.org/bin/windows/Rtools/rtools43/rtools.html
 
-$P(Y)$ is the probability of the data, integrated over parameter space.
+You will also need to set JAGS_ROOT in your Makevars.win file - see this file for more instructions:  https://cran.r-project.org/web/packages/runjags/INSTALL
 
----
+Note that the JAGS_ROOT path must match your installed version - to see what this is you can use:
 
-- In practice we usually work with the following:
+```{r eval=FALSE}
+runjags::findjags()
+```
 
-$$P(\theta|Y) \propto P(\theta)\times P(Y|\theta)$$
+### macOS
 
-. . .
+You need to install the command line tools - to do this open a terminal and type:
 
-- Our Bayesian posterior is therefore always a combination of the likelihood of the data, and the parameter priors
+```{r eval=FALSE}
+xcode-select --install
+```
 
-- But for more complex models the distinction between what is 'data' and 'parameters' can get blurred!
+And follow the instructions.  That should be all you need.
 
-## MCMC
+### Linux
 
-- A way of obtaining a numerical approximation of the posterior
+Congratualations; your OS already includes compilers and pkg-config, so you don't need to do anything!
 
-- Highly flexible, and easy(ish) using JAGS (or OpenBUGS, or Stan)
+## Install runjags
 
-- Not inherently Bayesian but most widely used in this context
+You can install runjags from GitHub using:
 
-- Assessing convergence is essential, otherwise we may not be summarising the true posterior
+```{r eval=FALSE}
+remotes::install_github("ku-awdc/runjags")
+```
 
-- Our chains are correlated so we need to consider the effective sample size
+This will take longer than usual, and will be more verbose.  Look out for errors - these will most likely be due to problems with JAGS_ROOT on Windows!
 
-## Hui-Walter models
+## Introduction
 
-- A specific class of model for paired diagnostic test data
+The new version of template_huiwalter works in the same way as the old one, but has some new features and arguments (none of which are currently documented, sorry).  But the ones you might be interested in are:
 
-- Usually (but not necessarily) fit using MCMC
+covariance:  this can now be specified as a data frame for specific covariance terms to include
 
-- Requirements are 2 or more tests in 2 or more populations (or 3 tests in 1 population)
+xxx_priors:  these can now be a list of values for different tests/populations, including a default value for anything not specifically named
 
-- Sensitivity and specificity must be consistent between populations
+ppp-values:  allows post-hoc calculation of Se/Sp by population, as well as ROC curves.  IMPORTANT NOTE:  this does not currently work as expected when there are correlation terms included, and/or with one or more missing test combinations.
 
-- Tests must be conditionally independent, although correlation terms can be added
+specify_populations:  facilitates cross-validation by dropping a population at a time without having to re-generate the model
 
-- Easiest to generate using runjags::template_huiwalter
+xxx_check:  different mechanisms of doing model validation (I will talk about these at the SBED conference)
+
+You will also want to make sure that you have your original data in long format, and including SampleID, TestName and Results columns, to enable the ppp features (also, the Results column needs to be a factor with two levels).
+
+## Dataset format
+
+This is an example of long format data:
+
+```{r}
+N <- 600
+tibble(
+    Population = rep(LETTERS[1:3], each=N/3),
+    status = rbinom(N, 1, rep(c(0.25,0.5,0.75), each=N/3)),
+    FirstTest = rbinom(N, 1, status*0.75 + (1-status)*0.05),
+    SecondTest = rbinom(N, 1, status*0.75 + (1-status)*0.05),
+    ThirdTest = rbinom(N, 1, status*0.75 + (1-status)*0.05)
+) |>
+  mutate(SampleID = row_number()) |>
+  select(-status) |>
+  pivot_longer(ends_with("Test"), names_to="TestName", values_to="Result") |>
+  mutate(Result = factor(Result, levels=c(0,1), labels=c("Neg","Pos"))) ->
+  long_data
+```
+
+Annoyingly, you (currently) still need to pass this to template_huiwalter as wide data:
+
+```{r}
+long_data |>
+  pivot_wider(names_from="TestName", values_from="Result") ->
+  wide_data
+```
+
+The function now returns (invisibly) some useful things that we need to save (as e.g. indexes):
+
+```{r}
+template_huiwalter(
+  wide_data,
+  covariance = tribble(~Test_A, ~Test_B, ~Active,
+  ),
+  ppp_values = TRUE
+) -> indexes
+```
+
+Have a look at the model code - a few things have changed compared to before...
+
+```{r echo=FALSE, comment=''}
+cat(readLines("huiwalter_model.txt"), sep="\n")
+```
 
 
-## Everyone up to speed?
+But we still run it the same way:
 
-Any questions so far?  
+```{r}
+results <- run.jags("huiwalter_model.txt")
+summary(results, vars=c("se","sp","prev"))
+```
 
-Anything unclear?
+One nice feature of the indexes is that it gives us names of populations and tests:
 
-...
+```{r}
+indexes$populations
+indexes$tests
+```
 
-All OK with GitHub?
+And it also (currently) contains the add_post_hoc and add_roc functions:
 
+```{r}
+(post_hoc <- indexes$add_post_hoc(long_data, results))
+```
 
-## Learning outcomes
+```{r}
+ggplot(post_hoc |> filter(Group=="TestPerformance"), aes(x=str_c(Type, " - ", Population), y=Median, ymin=Lower95, ymax=Upper95, col=Type)) +
+  geom_errorbar() +
+  geom_point() +
+  facet_grid(Variable ~ Parameter, scales="free_x") +
+  coord_flip() + xlab(NULL) + ylab(NULL)
+```
 
-By the end of the course you should be able to:
+Note that the add_roc function requires a column in the long_data called "Continuous", which holds the raw test result value - I haven't shown that here, but it should be fairly easy to use if you have suitable data.
 
-- Understand how and why to use simulated data in the context of Hui-Walter models (session 2)
+## More disclaimers
 
-- Use simulation to estimate the expected width of 95\% confidence intervals for a given sample size (session 3)
+Just in case you didn't read this the first time I will say it again:  although these features will be included in the next release version of runjags (on CRAN), I expect the implementation to change quite a bit - so the code given above will eventually break (and be replaced with something better, and documented).  This is just to give you a sneak preview of what is to come...
 
-- [Bonus material]:  a self-directed "sneak preview" of upcoming features of template_huiwalter including post-hoc estimates of se/sp stratified by population (session 4)
+If anyone has any suggestions for how the new interface might look (and even better: is willing to help with runjags development) then please do get in touch!
+
+```{r}
+file.remove("huiwalter_model.txt")
+```
+
+`r exercise_end()`

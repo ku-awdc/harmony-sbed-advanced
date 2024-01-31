@@ -18,6 +18,10 @@ params:
 subtitle: Revision and practical info
 ---
 
+```{r include=FALSE}
+source("../rsc/setup.R")
+```
+
 # Revision
 
 ## Bayes Rule
@@ -85,7 +89,7 @@ Any questions so far?
 
 Anything unclear?
 
-...
+. . .
 
 All OK with GitHub?
 
@@ -96,6 +100,13 @@ By the end of the course you should be able to:
 
 - Understand how and why to use simulated data in the context of Hui-Walter models (session 2)
 
-- Use simulation to estimate the expected width of 95\% confidence intervals for a given sample size (session 3)
+- Use simulation to do sample size calculations for Hui-Walter models (session 3)
+
+. . .
 
 - [Bonus material]:  a self-directed "sneak preview" of upcoming features of template_huiwalter including post-hoc estimates of se/sp stratified by population (session 4)
+
+. . .
+
+Also feel free to ask any other (related or unrelated) questions either during the exercise time or final 20 minute discussion.
+

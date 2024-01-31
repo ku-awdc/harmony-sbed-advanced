@@ -1,5 +1,5 @@
 #SRC = $(wildcard S*/Session_*.Rmd)
-SRC = S0_Preparation/Session_Preparation.Rmd S2_Simulation/Session_2.Rmd S3_SampleSize/Session_3.Rmd S4_Bonus/Session_4.Rmd
+SRC = S0_Preparation/Session_Preparation.Rmd S1_Revision/Session_1.Rmd S3_SampleSize/Session_3.Rmd S4_Bonus/Session_4.Rmd
 
 PDF   = $(SRC:.Rmd=.pdf)
 HTML  = $(SRC:.Rmd=.html)

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2022.1.31)  30 JAN 2024 12:31
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2022.1.31)  31 JAN 2024 01:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1151,87 +1151,9 @@ Overfull \vbox (45.59123pt too high) detected at line 102
 [1
 
 {/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Trying to load font information for OT1+lmss on input line 
-105.
-(/usr/local/texlive/2021/texmf-dist/tex/latex/lm/ot1lmss.fd
-File: ot1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `lmss' (encoding: OT1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-LaTeX Font Info:    Trying to load font information for OML+ccm on input line 1
-05.
-(/usr/local/texlive/2021/texmf-dist/tex/latex/concmath/omlccm.fd
-File: omlccm.fd 1999/03/10 v2.0b LaTeX font defs for Concrete math fonts
-)
-LaTeX Font Info:    Trying to load font information for OMS+ccsy on input line 
-105.
-(/usr/local/texlive/2021/texmf-dist/tex/latex/concmath/omsccsy.fd
-File: omsccsy.fd 1999/03/10 v2.0b LaTeX font defs for Concrete math fonts
-)
-LaTeX Font Info:    Trying to load font information for OMX+ccex on input line 
-105.
-(/usr/local/texlive/2021/texmf-dist/tex/latex/concmath/omxccex.fd
-File: omxccex.fd 1999/03/10 v2.0b LaTeX font defs for Concrete math fonts
-)
-LaTeX Font Info:    External font `xccex10' loaded for size
-(Font)              <10.95> on input line 105.
-LaTeX Font Info:    External font `xccex10' loaded for size
-(Font)              <8> on input line 105.
-LaTeX Font Info:    External font `xccex10' loaded for size
-(Font)              <6> on input line 105.
-(/usr/local/texlive/2021/texmf-dist/tex/latex/microtype/mt-msa.cfg
-File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
-) (/usr/local/texlive/2021/texmf-dist/tex/latex/microtype/mt-msb.cfg
-File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
-)
-LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10.95> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 105.
-LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <8> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 105.
-LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <6> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 105.
-[2
+\openout4 = `Session_4.vrb'.
 
-]pdfTeX warning (ext4): destination with the same identifier (name{revision}) h
-as been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.128 \end{frame}
-                 
-Overfull \vbox (10.87608pt too high) detected at line 128
- []
-
-[3
-
-]pdfTeX warning (ext4): destination with the same identifier (name{bayes-rule})
- has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.128 \end{frame}
-                 
-Overfull \vbox (10.87608pt too high) detected at line 128
- []
-
-[4
-
-]
-LaTeX Font Info:    Trying to load font information for TS1+lmss on input line 
-149.
-(/usr/local/texlive/2021/texmf-dist/tex/latex/lm/ts1lmss.fd
-File: ts1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-) [5
-
-] [6
-
-] [7
-
-] [8
-
-] [9
-
-] [10
+(./Session_4.vrb Excluding 'comment' comment.) [2
 
 ]
 \tf@nav=\write7
@@ -1245,27 +1167,22 @@ File: ts1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 
 (./Session_4.aux) ) 
 Here is how much of TeX's memory you used:
- 29243 strings out of 478287
- 591577 string characters out of 5846750
- 854180 words of memory out of 5000000
- 46731 multiletter control sequences out of 15000+600000
- 518488 words of font info for 91 fonts, out of 8000000 for 9000
+ 28917 strings out of 478287
+ 584383 string characters out of 5846750
+ 852978 words of memory out of 5000000
+ 46496 multiletter control sequences out of 15000+600000
+ 496705 words of font info for 57 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 128i,13n,122p,1810b,773s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ts
-1.enc} </Users/matthewdenwood/Library/texlive/2021/texmf-var/fonts/pk/ljfour/pu
-blic/concmath-fonts/xccsy10.657pk> </Users/matthewdenwood/Library/texlive/2021/
-texmf-var/fonts/pk/ljfour/public/concmath-fonts/xccmi10.657pk>{/usr/local/texli
-ve/2021/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/texlive/2021/texmf-
-dist/fonts/enc/dvips/lm/lm-ec.enc}</usr/local/texlive/2021/texmf-dist/fonts/typ
-e1/public/lm/lmss10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/
-lm/lmss12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmss8.p
-fb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb></usr
-/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmsso10.pfb>
-Output written on Session_4.pdf (10 pages, 112966 bytes).
+ 128i,13n,122p,1810b,580s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ec
+.enc}</usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmss10.pfb></usr
+/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmss12.pfb></usr/local/tex
+live/2021/texmf-dist/fonts/type1/public/lm/lmss8.pfb></usr/local/texlive/2021/t
+exmf-dist/fonts/type1/public/lm/lmssbx10.pfb>
+Output written on Session_4.pdf (2 pages, 78158 bytes).
 PDF statistics:
- 136 PDF objects out of 1000 (max. 8388607)
- 98 compressed objects within 1 object stream
- 28 named destinations out of 1000 (max. 500000)
- 32834 words of extra memory for PDF output out of 35830 (max. 10000000)
+ 53 PDF objects out of 1000 (max. 8388607)
+ 31 compressed objects within 1 object stream
+ 6 named destinations out of 1000 (max. 500000)
+ 18490 words of extra memory for PDF output out of 20736 (max. 10000000)
 

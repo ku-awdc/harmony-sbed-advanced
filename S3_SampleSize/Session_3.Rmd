@@ -1,7 +1,7 @@
 ---
 title: "Session 3"
 author: "Matt Denwood"
-date: '2023-07-13'
+date: '2024-01-30'
 output:
   html_document: default
   beamer_presentation:
@@ -20,38 +20,42 @@ subtitle: Sample Size Estimation
 
 ```{r setup, include=FALSE}
 source("../rsc/setup.R")
+load("../rsc/cache.rda")
 ```
 
-# An introduction to day 2
 
-## Building on day 1
+## A note on coding styles  {.fragile}
 
-Yesterday we looked at simulating data - we will continue that theme today!
-
-BUT:  my code looks a bit different to Giles's code, e.g.:
+My code looks a bit different to Giles's code, e.g.:
 
 ```{r}
 # If necessary:
 ## install.packages(c("tidyverse","pbapply"))
+
 library("tidyverse")
 library("pbapply")
+
+
 ```
 
-REMEMBER:  the coding style is not important as long as the output is the same
+. . .
 
+REMEMBER:  the coding style is not important as long as the output is the same!
 
 # Background to sample size calculations
 
-## Power calculation
+## Power calculation  {.fragile}
 
 Power is defined as the proportion of experiments that can be expected to give p-values of <= 0.05 (or whatever alpha is chosen), conditional on the specified parameters.  Power calculations can be done using:
 
-- Approximation methods, e.g. power.t.test:
+1. Approximation methods, e.g. power.t.test:
 
 ```{r}
 power.t.test(n = 150, delta = 0.25, sd = 1)
 ```
-- Numerical methods i.e. by simulation:
+- - -
+
+2. Numerical methods i.e. by simulation:
 
 A function to simulate data, then calculate and return a p-value:
 
@@ -65,12 +69,20 @@ p_fun <- function(parameters){
 }
 ```
 
+```{r}
+p_fun(tibble(Size = 150L))
+```
+
+- - -
+
 There is randomness so this will be different every time it is run:
 
 ```{r}
 p_fun(tibble(Size = 150L))
 p_fun(tibble(Size = 150L))
 ```
+
+- - -
 
 So we must run it several times (e.g. 1000):
 
@@ -82,7 +94,9 @@ tibble(Iteration = seq_len(1000L), Size = 150L) |>
   pvals
 ```
 
-And we calculate the power as so:
+. . .
+
+And we calculate the power like so:
 
 ```{r}
 pvals |>
@@ -90,23 +104,18 @@ pvals |>
   summarise(Power = sum(P_val <= 0.05) / n(), .groups="drop")
 ```
 
-### Exercise
-
-1. Examine and run the code given above - make sure you understand what the p_fun function does and why the code is separated into function/usage like this
-
-1. What are the advantages/disadvantages of the approximation method vs numeric method?
-
-
-## Sample size estimation
+## Sample size estimation  {.fragile}
 
 The goal is typically to find the minimum sample size that corresponds to >= 80\% power, for a specified set of parameters.  This can be done in one of two ways:
 
-- Using approximation methods directly i.e.:
+1. Using approximation methods directly i.e.:
 
 ```{r}
 power.t.test(n = NULL, delta = 0.25, sd = 1, power = 0.8)
 ```
-- By trying different sample sizes (using either approximation methods or simulation):
+- - -
+
+2. By trying different sample sizes (using either approximation methods or simulation):
 
 ```{r}
 tibble(Size = seq(100, 500, by=25)) |>
@@ -115,141 +124,344 @@ tibble(Size = seq(100, 500, by=25)) |>
     parameters |>
       mutate(Power = power.t.test(n = parameters$Size, delta = 0.25, sd = 1)$power)
   }) |>
-  bind_rows() |>
-  ggplot(aes(x=Size, y=Power)) +
+  bind_rows() ->
+  power_estimates
+```
+
+- - -
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(power_estimates, aes(x=Size, y=Power)) +
   geom_point() +
   stat_smooth(method="loess") +
   geom_hline(yintercept = 0.8)
 ```
 
 
-### Exercise
-
-1. Find the required sample size by simulation
-
-1. What are the challenges of doing this by simulation that we don't have to worry about when using approximation methods?
-
-
 # Sample size calculation for LCM
 
-## Determining the objective
+## Determining the objective  {.fragile}
 
 Let's take a simple 2-test, 2-population Hui-Walter model as an example.
 
-Group discussion:
+- There is (usually) no hypothesis to test, so we don't have a concept of power
 
-- What parameters do we need to simulate a dataset?  Which of these are experimental/controllable parameters, and which are nuisance parameters?
+- Our objective is to have narrow posterior (95\%) credible intervals ("precision"*)
 
-- What might we be interested in estimating from the model?
+- But for which parameter?
 
-- How can we maximise the efficiency of fitting the model to each dataset we simulate?
+* Note: this is not exactly the same as the usual statistical definition of precision
+
+## Types of parameter  {.fragile}
+
+In general: 
+
+- Experimental parameter:  structural things that we can control
+
+- Parameter of interest:  things we want to estimate
+
+- Nuisance parameters:  everything else
+
+. . .
+
+For t-tests: 
+
+- Experimental parameter:  sample size
+
+- Parameter of interest:  difference in means
+
+- Nuisance parameters:  standard deviation
+
+- - -
+
+In general: 
+
+- Experimental parameter:  structural things that we can control
+
+- Parameter of interest:  things we want to estimate
+
+- Nuisance parameters:  everything else
+
+For Hui-Walter models:
+
+- Experimental parameters:  number of samples from each population (and maybe number of populations)
+
+- Parameters of interest:  sensitivities, specificities
+
+- Nuisance parameters:  prevalences (and maybe correlation terms for >2 tests)
 
 
-### Exercise
+## Determining the objective  {.fragile}
 
-Write a function to:
+We have 4 parameters of interest:  2 x Se, 2 x Sp.  Which are most important?
 
-1. Take input parameters in two arguments:  controllable (2xN), and nuisance (2xSe, 2xSp, 2xPrev)
+- Is sensitivity the sole objective?  NB: high-prevalence population will be prioritised.
 
-1. Simulate a dataset
+- Is specificity the sole objective?  NB: low-prevalence population will be prioritised.
 
-1. Analyse the dataset as quickly as possible
+- Are sensitivity and specificity equally important?  If so, do we average the relative or absolute size of their 95\% CI?
 
-1. Return 95\% CI for the two prevalence, sensitivity and specificity parameters
+. . .
 
-Remember to:
+- Would Youden's index be easier?
 
-- Restrict Se/Sp to values above 50\%
+. . .
 
-- Set the random seed in BOTH R and JAGS
+- One or both tests?
 
-- Run minimal burnin and samples
+. . .
 
-- Don't calculate plots or summary statistics you don't need i.e. set summarise=FALSE
+My suggestion:  define "precision" as the average width of 95\% CI for Youden's index (for either one or both tests)
 
-- Set the following to silence output:
 
-```{r}
-runjags.options(silent.jags=TRUE, silent.runjags=TRUE)
+## Simulating data  {.fragile}
+
+Best as a function that takes population-level and test-level inputs:
+
+```{r eval=FALSE}
+simulation_fun <- function(populations, tests){
+  stopifnot(
+    is.data.frame(populations), 
+    nrow(populations) >= 2L,
+    c("N","Prev") %in% names(populations),
+    populations$N >= 1L,
+    populations$N %% 1 == 0,
+    populations$Prev >= 0, populations$Prev <= 1
+  )
+  stopifnot(
+    is.data.frame(tests), 
+    nrow(tests) >= 2L,
+    c("Se","Sp") %in% names(tests),
+    tests$Se >= 0, tests$Se <= 1,
+    tests$Sp >= 0, tests$Sp <= 1
+  )
+  ## Do some stuff like from session 2 and return the simulated dataset
+  ## See the exercise for a complete function 
+}
 ```
 
-Finally, test that the function works.  Use parameter values for prevalence, se and sp as follows:
+- - -
 
-- Prevalence:  10\%, 35\%
-- Sensitivity:  80\%, 90\%
-- Specificity:  99\%, 95\%
-
-Use your own suggestions for N values!
-
-HINT:  think about how you would code this first, but it is definitely OK to look at the solution (below the optional exercise) rather than trying to code the whole thing yourself!
-
-
-### Optional exercise
-
-Adapt the function to calculate and return 95\% CI for the following:
-
-- The difference in prevalence between the two populations
-
-- Youden's index for each test (Se+Sp-1)
-
-- The ratio of Youden's index between each test
-
-
-### Solution
-
-Here is one way of coding this.
-
-Required packages etc:
+Output looks like:
 
 ```{r}
-# Required packages:
-library("tidyverse")
-library("pbapply")
-library("runjags")
+tests <- tribble(
+  ~Se, ~Sp,
+  0.8, 0.99,
+  0.9, 0.95
+)
 
-# Explicitly load coda for summary statistics:
-library("coda")
+populations <- tribble(
+  ~N, ~Prev,
+  100, 0.1,
+  100, 0.4
+)
 
-# Silence output from runjags:
-runjags.options(silent.jags=TRUE, silent.runjags=TRUE)
+(data <- simulation_fun(populations, tests))
 ```
 
-A function to simulate and analyse data:
+
+## Analying data  {.fragile}
+
+Also best as a function taking the data, burnin and sample iterations as inputs:
+
+```{r eval=FALSE}
+analysis_fun <- function(data, burnin=1000L, sample=5000L){
+  stopifnot(is.matrix(data), nrow(data)==4L, ncol(data)==2L, data>=0L)
+  ## Do some stuff like from session 2 to analyse the data
+  ## See the exercise for a complete function 
+  results |>
+    summary(vars=c("youden","se","sp")) |>
+    as.data.frame() |>
+    rownames_to_column("Variable")
+}
+```
+
+- - -
+
+Output looks like:
 
 ```{r}
-bootfun <- function(parameters, nuisance, burnin=1000L, sample=5000L){
+analysis_fun(data)
+```
+
+## A quick note on label switching
+
+I now recommend this method of specifying minimally informative priors:
+
+```{r eval=FALSE}
+model{
+  ### Rest of the model as usual
   
-  # Parameter checks:
-  stopifnot(is.data.frame(parameters), nrow(parameters)==1L, all(c("Iteration","N_1","N_2") %in% names(parameters)), parameters$N_1 > 0L, parameters$N_2 > 0L)
+  for(t in 1:2){
+    se[t] ~ dbeta(2,1)
+    sp[t] ~ dbeta(2,1)
+    youden[t] <- se[t]+sp[t]-1.0
+    AcceptTest[t] ~ dbern(ifelse(youden[t] >= 0.0, 1, 0))
+  }
+ #data# AcceptTest 
+}
+
+AcceptTest <- c(1,1)
+```
+
+. . .
+
+More on this during my presentation tomorrow!
+
+## Combining the two  {.fragile}
+
+```{r}
+summary_fun <- function(parameters, iterations, cl=NULL, burnin=1000L, sample=5000L){
+  stopifnot(is_tibble(parameters))
+  stopifnot(iterations >= 1L)
   
-  # Nuisance parameter checks:
-  is_prob <- function(x) all(x >= 0.0 & x <= 1.0)
-  stopifnot(is.list(nuisance), all(c("Se","Sp","Prev") %in% names(nuisance)), is_prob(nuisance$Se), is_prob(nuisance$Sp), is_prob(nuisance$Prev))
-  
-  # Simulate data at individual level (not the fastest, but it is the safest!):
-  ## A row per individual in each population:
-  list(
-    tibble(Individual = seq_len(parameters$N_1), Population = 1L),
-    tibble(Individual = seq_len(parameters$N_2), Population = 2L)
-  ) |>
-  ## Generate individual-level test results:
+  parameters |>
+    mutate(ParameterSet = row_number()) |>
+    expand_grid(Iteration = seq_len(iterations)) |>
+    rowwise() |>
+    group_split() |>
+    pblapply(function(x){
+      simulation_fun(x$Populations[[1]], x$Tests[[1]]) |>
+        analysis_fun(burnin=burnin, sample=sample) |>
+        bind_cols(x)
+    }, cl=cl) |>
     bind_rows() |>
-    mutate(Status = rbinom(n(), 1L, prob=nuisance$Prev[Population])) |>
-    mutate(Test1 = rbinom(n(), 1L, prob=nuisance$Se[1L] * Status + (1.0-nuisance$Sp[1L]) * (1L-Status))) |>
-    mutate(Test2 = rbinom(n(), 1L, prob=nuisance$Se[2L] * Status + (1.0-nuisance$Sp[2L]) * (1L-Status))) |>
-  ## Summarise:
+    mutate(WidthCI = Upper95 - Lower95) |>
+    group_by(ParameterSet, Variable) |>
+    summarise(MeanEst = mean(Mean), MeanWidth = mean(WidthCI), MeanLCI = mean(Lower95), MeanUCI = mean(Upper95), .groups="drop") |>
+    full_join(parameters |> mutate(ParameterSet = row_number()), by="ParameterSet")
+}
+```
+
+Guess what ... I will use another function!  This function might look scary if you are not used to this way of coding ... but don't worry too much about exactly what it does.
+
+- - -
+
+Output looks like:
+
+```{r}
+parameters <- tibble(Populations=list(populations), Tests=list(tests))
+summary_fun(parameters, 10L)
+```
+
+## Visualisaing the results  {.fragile}
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary_results |>
+  filter(str_detect(Variable, "youden")) |>
+  group_by(Split) |>
+  summarise(Variable = "precision", MeanWidth = mean(MeanWidth)) |>
+  bind_rows(
+    summary_results |> select(Split, Variable, MeanWidth)
+  ) ->
+  plotdata
+
+plotdata |>
+  filter(str_detect(Variable, "^s")) |>
+  ggplot(aes(x=Split, y=MeanWidth, col=Variable)) +
+  geom_smooth(se=FALSE) + 
+  geom_point()
+```
+
+Here is an example with a total of 500 samples, which are allocated between populations differently.  In general, Se is better estimated with with more samples in (the higher-prevalence) population 2, and Sp is better estimated with with more samples in (the lower-prevalence) population 1.
+
+- - -
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+plotdata |>
+  filter(!str_detect(Variable, "^s")) |>
+  ggplot(aes(x=Split, y=MeanWidth, col=Variable)) +
+  geom_smooth(se=FALSE) + 
+  geom_point()
+```
+
+It is easier to see a balance between these using Youden's index or our "precision".
+
+The optimum is around a 40/60 split, but of course this could be better defined using a more refined resolution for the split (and/or a higher number of iterations - this is based on 200 iterations per parameter set).
+
+## Exercises {.fragile}
+
+1. Look at the function code given in the HTML file: read it through and make sure you understand it!
+
+2. Re-create the "visualising the results" plot I have given above.  Test #1 has Se/Sp of 0.8/0.99 and Test #2 has Se/Sp of 0.9/0.95.  Prevalences in the two populations are 10\% and 40\%, and the total sample size is 500.
+
+3. Assuming that the optimum distribution of tests between the two populations is always around 40\% / 60\% for these test/prevalence estimates, create a plot showing how precision increases with total sample size of between 100 and 1000.
+
+4. How much does the precision also depend on the parameters of interest (diagnostic test performance) and nuisance parameters (prevalences)?
+
+`r exercise_start()`
+
+## Functions
+
+An example function for data simulation:
+
+```{r}
+simulation_fun <- function(populations, tests){
+  stopifnot(
+    is.data.frame(populations), 
+    nrow(populations) >= 2L,
+    c("N","Prev") %in% names(populations),
+    populations$N >= 1L,
+    populations$N %% 1 == 0,
+    populations$Prev >= 0, populations$Prev <= 1
+  )
+  stopifnot(
+    is.data.frame(tests), 
+    nrow(tests) >= 2L,
+    c("Se","Sp") %in% names(tests),
+    tests$Se >= 0, tests$Se <= 1,
+    tests$Sp >= 0, tests$Sp <= 1
+  )
+  
+  populations |>
+    mutate(Population = fct(str_c("Pop", row_number()))) |>
+    group_by(Population, N, Prev) |>
+    reframe(Individual = str_c(Population, "_", seq_len(N))) |>
+    ungroup() |>
+    mutate(Status = rbinom(n(), 1L, Prev)) |>
+    expand_grid(
+      tests |>
+        mutate(TestNum = fct(str_c("Test", row_number())))
+    ) |>
+    mutate(Result = rbinom(n(), 1L, Status*Se + (1-Status)*(1-Sp))) |>
+    select(Population, Individual, TestNum, Result) |>
+    pivot_wider(names_from="TestNum", values_from=Result) |>
     count(Population, Test1, Test2) |>
-  ## Make sure to fill in any non-existing combinations with explicit 0:
     complete(Population, Test1, Test2, fill = list(n = 0L)) |>
-  ## Order to match the JAGS model code:
     arrange(Population, Test2, Test1) ->
-    simdata
+    data
+  stopifnot(nrow(data)==8L, sum(data$n) == sum(populations$N))
+  return(data |> pull(n) |> matrix(ncol=2))
+}
+```
+
+This can be used like so:
+
+```{r}
+tests <- tribble(
+  ~Se, ~Sp,
+  0.8, 0.99,
+  0.9, 0.95
+)
+
+populations <- tribble(
+  ~N, ~Prev,
+  100, 0.1,
+  100, 0.4
+)
+
+(data <- simulation_fun(populations, tests))
+```
+
+An example function for analysis:
+
+```{r}
+analysis_fun <- function(data, burnin=1000L, sample=5000L){
+  stopifnot(is.matrix(data), nrow(data)==4L, ncol(data)==2L, data>=0L)
   
-  ## Check (better safe than sorry):
-  stopifnot(nrow(simdata)==8L)
-  
-  # JAGS model:
-  mod <- "model{
+  ## A minimal model:
+  model <- "model{
 	for(p in 1:Populations){
 		Tally[1:4,p] ~ dmulti(prob[1:4,p], N[p])
 		prob[1,p] <- prev[p] * ((1-se[1])*(1-se[2]))  +  (1-prev[p]) * (sp[1])*(sp[2])
@@ -261,165 +473,101 @@ bootfun <- function(parameters, nuisance, burnin=1000L, sample=5000L){
   	prev[p] ~ dbeta(1,1)
 	}
   for(t in 1:2){
-    se[t] ~ dbeta(1,1)
-    sp[t] ~ dbeta(1,1)T(1-se[t],)
+    se[t] ~ dbeta(2,1)
+    sp[t] ~ dbeta(2,1)
     youden[t] <- se[t]+sp[t]-1.0
+    AcceptTest[t] ~ dbern(ifelse(youden[t] >= 0.0, 1, 0))
   }
-  prev_diff <- prev[1]-prev[2]
-  youden_ratio <- youden[1]/youden[2]
-}"
+  }"
   
-  # Data and inits blocks:
-  data <- list(Populations=2L, Tally=matrix(simdata$n, ncol=2L), N=c(parameters$N_1, parameters$N_2))
-  inits <- list(se = nuisance$Se, sp = nuisance$Sp, prev = nuisance$Prev, .RNG.name = "lecuyer::RngStream")
-
-  # Run the model:
-  results <- run.jags(mod, monitor=c("prev","se","sp","prev_diff","youden","youden_ratio"),
-              data=data, n.chains=2L,
-              inits = list(c(inits,.RNG.seed=1), c(inits,.RNG.seed=2)),
-              burnin=burnin, sample=sample, method="rjags", summarise=FALSE)
+  datalist <- list(Tally = data, N = apply(data, 2L, sum), Populations=2L, AcceptTest=c(1,1))
   
-  # Calculate summary statistics, add to the parameters, and return:
-  mcmc <- as.mcmc.list(results)
-  hpd <- results |> combine.mcmc() |> HPDinterval()
-  bind_cols(
-    parameters,
-    tibble(
-      Variable = varnames(mcmc),
-      SSeff = effectiveSize(mcmc),
-      psrf = gelman.diag(mcmc, multivariate=FALSE, autoburnin=FALSE)[[1]][,1],
-      LowerCI = hpd[,1],
-      UpperCI = hpd[,2]
-    )
-  )
+  run.jags(model, monitor=c("youden","se","sp"), data=datalist) |>
+    summary(vars=c("youden","se","sp")) |>
+    as.data.frame() |>
+    rownames_to_column("Variable")
 }
 ```
 
-Example usage:
+This can be used as follows:
 
 ```{r}
-parameters <- tibble(Iteration = 1L, N_1 = 100L, N_2 = 100L)
-nuisance <- list(Se = c(0.8, 0.9), Sp = c(0.99, 0.95), Prev = c(0.10, 0.35))
-
-system.time(
-  bootfun(parameters, nuisance)
-)
+analysis_fun(data)
 ```
 
-Example usage for 50 iterations on 10 cores:
-
-CLuster setup code - Windows:
-
-```{r eval=FALSE}
-library("parallel")
-cl <- makePSOCKcluster(10L)
-clusterEvalQ(cl, {
-  library("tidyverse")
-  library("runjags")
-  library("coda")
-  runjags.options(silent.jags=TRUE, silent.runjags=TRUE)
-  library("rjags")
-  load.module("lecuyer")
-}) -> tt
-```
-
-Cluster setup code - mac/linux:
+It will help to set the following options to suppress output:
 
 ```{r}
-if(.Platform$OS.type=="unix") cl <- 10L
+runjags.options(silent.jags=TRUE, inits.warning=FALSE, predraw.plots=FALSE)
 ```
 
-Run the simulations in parallel with a progress bar:
+And now we can use our previously defined summary function:
 
 ```{r}
-tibble(Iteration = seq_len(50L), N_1 = 100L, N_2 = 100L) |>
-  group_split(Iteration) |>
-  pblapply(bootfun, nuisance=nuisance, cl=cl) |>
-  bind_rows() ->
-  all_results
-
-## Only needed on Windows:
-if(inherits(cl, "cluster")) stopCluster(cl)
+parameters <- tibble(Populations=list(populations), Tests=list(tests))
+summaries <- summary_fun(parameters, iterations=20L)
 ```
 
-The results:
+From this, we can define precision as the average of the MeanWidth of the two Youden's index parameters.
 
-```{r}
-all_results
+
+## Solutions
+
+1. This just takes practice! If you prefer not to use tidyverse then it is perfectly valid to code this in a different way, but I would still strongly suggest using functions to break the task into smaller pieces.
+
+2. Here is the basic code I used (except with more iterations):
+
+```{r message=FALSE, warning=FALSE}
+tibble(Split = seq(0.1, 0.9, by=0.1)) |>
+  mutate(TotalSamples = 500L, N1 = round(TotalSamples*Split), N2 = TotalSamples-N1) |>
+  rowwise() |>
+  mutate(Populations = list(tibble(N = c(N1, N2), Prev = c(0.1, 0.4)))) |>
+  mutate(Tests = list(tests)) |>
+  ungroup() |>
+  summary_fun(iterations = 10L, cl=NULL) ->
+  summary_results
+
+summary_results |>
+  filter(str_detect(Variable, "youden")) |>
+  group_by(Split) |>
+  summarise(Variable = "precision", MeanWidth = mean(MeanWidth)) |>
+  bind_rows(
+    summary_results |> select(Split, Variable, MeanWidth)
+  ) |>
+  ggplot(aes(x=Split, y=MeanWidth, col=Variable)) +
+  geom_smooth(se=FALSE) + 
+  geom_point()
 ```
 
-Now we can use standard tidyverse tools, e.g.:
+3. This is very easy using very similar code to before:
 
-```{r}
-all_results |>
-  mutate(Parameter = case_when(
-    str_detect(Variable, "se\\[") ~ "Se",
-    str_detect(Variable, "sp\\[") ~ "Sp",
-    str_detect(Variable, "youden\\[") ~ "youden",
-    TRUE ~ "Other"
-  )) |>
-  filter(Parameter %in% c("Se","Sp","youden")) |>
-  mutate(Test = case_when(
-    str_detect(Variable, "1") ~ "Test_1",
-    str_detect(Variable, "2") ~ "Test_2"
-  )) |>
-  mutate(CIwidth = UpperCI-LowerCI) |>
-  select(Iteration, N_1, N_2, Parameter, Test, CIwidth) |>
-  pivot_wider(names_from = "Test", values_from = "CIwidth") |>
-  mutate(MeanCIwidth = (Test_1 + Test_2) / 2)
+```{r message=FALSE, warning=FALSE}
+tibble(TotalSamples = seq(100,1000,by=100), N1 = round(TotalSamples*0.4), N2 = TotalSamples-N1) |>
+  rowwise() |>
+  mutate(Populations = list(tibble(N = c(N1, N2), Prev = c(0.1, 0.4)))) |>
+  mutate(Tests = list(tests)) |>
+  ungroup() |>
+  summary_fun(iterations = 10L, cl=NULL) ->
+  summary_results
+
+summary_results |>
+  filter(str_detect(Variable, "youden")) |>
+  group_by(TotalSamples) |>
+  summarise(Precision = mean(MeanWidth)) |>
+  ggplot(aes(x=TotalSamples, y=Precision)) +
+  geom_smooth(se=FALSE) + 
+  geom_point()
 ```
 
+4. The answer is "a lot" - so results are always scenario specific!
 
-## Obtaining an answer
+```{r include=FALSE}
+#save(simulation_fun, analysis_fun, summary_fun, summary_results, file="rsc/cache.rda")
+```
 
-The answer depends on the objective ... and there are many things that might be the objective, including:
-
-- Width of 95\% CI for sensitivity for one or both tests
-
-- Width of 95\% CI for specificity for one or both tests
-
-- Width of 95\% CI for prevalence in one or both populations
-
-- Something more complex, like proving one test has a higher Se/Sp than the other (maybe using Bayesian p-values)
-
-- Several / all of the above
-
-Group discussion:
-
-- How would we expect these things to vary depending on:
-  - Number of samples in each population
-  - Estimated prevalence in each population
-
-- What trade-offs can we expect?
-
-
-### Exercise
-
-1. Use the code above to calculate three values per iteration:  the width of 95\% CI for the two prevalence parameters, and the average of these widths
-
-1. Calculate and analyse 50 datasets each for a total of 120, 150, 240 samples, where the samples are split 1/3 vs 2/3, 1/2 vs 1/2, and 2/3 vs 1/3 between the two populations.
-
-1. Visualise the results
-
-
-## Additional considerations
-
-Discussion:
-
-- How should we deal with uncertainty in parameter values?  Integrate over them!
-
-- How best to deal with multiple dimensions of N (i.e. total samples and distribution of samples)?
-
-- What about more complex scenarios e.g. 3 tests, including covariance?
-
-
-## Further reading
-
-If you are interested in making this more complicated (!), you can read through some related work here: [https://www.costmodds.org/projects/covetlabLCM/sample_size_calculation.html](https://www.costmodds.org/projects/covetlabLCM/sample_size_calculation.html)
+`r exercise_end()`
 
 
 ```{r include=FALSE}
 unlink(cleanup)
 ```
-
-## Remember the bonus session 4!

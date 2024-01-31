@@ -10,7 +10,7 @@ library("tidyverse")
 library("ggdag")
 library("runjags")
 library("knitr")
-runjags.options(silent.jags=TRUE, silent.runjags=TRUE)
+runjags.options(silent.jags=TRUE, silent.runjags=TRUE, inits.warning=FALSE, predraw.plots=FALSE)
 
 theme_set(theme_light())
 
