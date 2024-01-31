@@ -93,6 +93,8 @@ Anything unclear?
 
 All OK with GitHub?
 
+You should pull changes from the repository now!!!
+
 
 ## Learning outcomes
 
