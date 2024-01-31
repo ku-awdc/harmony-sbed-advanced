@@ -162,7 +162,41 @@ ggplot(post_hoc |> filter(Group=="TestPerformance"), aes(x=str_c(Type, " - ", Po
   coord_flip() + xlab(NULL) + ylab(NULL)
 ```
 
-Note that the add_roc function requires a column in the long_data called "Continuous", which holds the raw test result value - I haven't shown that here, but it should be fairly easy to use if you have suitable data.
+This can also be used to assess tests that were not known to the model, for example we can exclude SecondTest from the model and still get post-hoc estimates:
+
+```{r}
+template_huiwalter(
+  wide_data |> select(-SecondTest),
+  covariance = tribble(~Test_A, ~Test_B, ~Active,
+  ),
+  ppp_values = TRUE
+) -> indexes
+
+results_no2 <- run.jags("huiwalter_model.txt")
+post_hoc <- indexes$add_post_hoc(long_data, results_no2)
+
+ggplot(post_hoc |> filter(Group=="TestPerformance"), aes(x=str_c(Type, " - ", Population), y=Median, ymin=Lower95, ymax=Upper95, col=Type)) +
+  geom_errorbar() +
+  geom_point() +
+  facet_grid(Variable ~ Parameter, scales="free_x") +
+  coord_flip() + xlab(NULL) + ylab(NULL)
+```
+
+Note that the post-hoc estimates are still produced for SecondTest even though it was not estimated by the model. This can be useful for (1) assessing tests that were too highly correlated with another test to be included in the model, (2) assessing tests where the Se/Sp varies by population and therefore cannot be added to the model without breaking key assumptions.  Of course, the model itself still needs a minimum of two tests, and excluding information from the model unnecessarily will just give wider credible intervals.
+
+## ROC curves
+
+There is another function in the indexes output called add_roc. This requires a column in the long_data called "Continuous", which holds the raw test result value - I haven't shown that here, but it should be fairly easy to use if you have suitable data, for example:
+
+```{r eval=FALSE}
+roc <- indexes$add_roc(long_data |> filter(TestName=="SecondTest"), results, positive_direction=">")
+ggplot(roc, aes(x=Threshold, y=Mean, ymin=Lower95, ymax=Upper95)) +
+  geom_ribbon(alpha=0.25, lwd=0) +
+  geom_line() +
+  geom_vline(xintercept=_current_cutoff_, lty="dashed") +
+  ylab(NULL) + xlab("Cutoff")
+```
+
 
 ## More disclaimers
 
