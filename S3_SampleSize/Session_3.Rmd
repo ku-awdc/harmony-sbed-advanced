@@ -216,7 +216,7 @@ My suggestion:  define "precision" as the average width of 95\% CI for Youden's 
 
 ## Simulating data  {.fragile}
 
-Best as a function that takes population-level and test-level inputs:
+This is best as a function that takes population-level and test-level inputs:
 
 ```{r eval=FALSE}
 simulation_fun <- function(populations, tests){
@@ -236,7 +236,7 @@ simulation_fun <- function(populations, tests){
     tests$Sp >= 0, tests$Sp <= 1
   )
   ## Do some stuff like from session 2 and return the simulated dataset
-  ## See the exercise for a complete function 
+  ## See the exercise for a complete function!
 }
 ```
 
@@ -382,9 +382,9 @@ The optimum is around a 40/60 split, but of course this could be better defined 
 
 ## Exercises {.fragile}
 
-1. Look at the function code given in the HTML file: read it through and make sure you understand it!
+1. Either have a go at writing your own functions for simulation_fun and analysis_fun (based on the code from earlier today), or just look at the function code given in the HTML file (although make sure you read it through so that you understand it!).
 
-2. Re-create the "visualising the results" plot I have given above.  Test #1 has Se/Sp of 0.8/0.99 and Test #2 has Se/Sp of 0.9/0.95.  Prevalences in the two populations are 10\% and 40\%, and the total sample size is 500.
+2. Re-create the "visualising the results" plot I have given above (using either your own functions or the functions I have provided below).  Test #1 has Se/Sp of 0.8/0.99 and Test #2 has Se/Sp of 0.9/0.95.  Prevalences in the two populations are 10\% and 40\%, and the total sample size is 500.
 
 3. Assuming that the optimum distribution of tests between the two populations is always around 40\% / 60\% for these test/prevalence estimates, create a plot showing how precision increases with total sample size of between 100 and 1000.
 
@@ -501,14 +501,46 @@ It will help to set the following options to suppress output:
 runjags.options(silent.jags=TRUE, inits.warning=FALSE, predraw.plots=FALSE)
 ```
 
-And now we can use our previously defined summary function:
+And now we can use our previously defined summary function (copied here for convenience):
+
+```{r}
+summary_fun <- function(parameters, iterations, cl=NULL, burnin=1000L, sample=5000L){
+  stopifnot(is_tibble(parameters))
+  stopifnot(iterations >= 1L)
+  
+  parameters |>
+    mutate(ParameterSet = row_number()) |>
+    expand_grid(Iteration = seq_len(iterations)) |>
+    rowwise() |>
+    group_split() |>
+    pblapply(function(x){
+      simulation_fun(x$Populations[[1]], x$Tests[[1]]) |>
+        analysis_fun(burnin=burnin, sample=sample) |>
+        bind_cols(x)
+    }, cl=cl) |>
+    bind_rows() |>
+    mutate(WidthCI = Upper95 - Lower95) |>
+    group_by(ParameterSet, Variable) |>
+    summarise(MeanEst = mean(Mean), MeanWidth = mean(WidthCI), MeanLCI = mean(Lower95), MeanUCI = mean(Upper95), .groups="drop") |>
+    full_join(parameters |> mutate(ParameterSet = row_number()), by="ParameterSet")
+}
+```
+
+Using code like this (note that Populations and Tests are lists of tibbles, contained within another tibble - see https://bookdown.org/Maxine/r4ds/nesting.html# for more details on why this is a good idea):
 
 ```{r}
 parameters <- tibble(Populations=list(populations), Tests=list(tests))
 summaries <- summary_fun(parameters, iterations=20L)
 ```
 
-From this, we can define precision as the average of the MeanWidth of the two Youden's index parameters.
+From this, we can define precision as the average of the MeanWidth of the two Youden's index parameters:
+
+```{r}
+summaries |>
+  filter(str_detect(Variable, "youden")) |>
+  group_by(ParameterSet, Populations, Tests) |>
+  summarise(Precision = mean(MeanWidth), .groups="drop")
+```
 
 
 ## Solutions
